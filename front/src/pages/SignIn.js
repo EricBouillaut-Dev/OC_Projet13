@@ -22,11 +22,9 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Tentative de connexion avec:", email, password);
     dispatch(signIn({ email, password }))
       .unwrap()
-      .then((response) => {
-        console.log("Réponse de la connexion:", response);
+      .then(() => {
         // Stocker le login dans localStorage si "Remember me" est coché
         if (rememberMe) {
           localStorage.setItem("userEmail", email);

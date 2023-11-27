@@ -9,23 +9,14 @@ import UserProfile from "../pages/UserProfile";
 import Error from "../pages/Error";
 
 function App() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, token } = useSelector((state) => state.auth);
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    const jwtToken = localStorage.getItem("jwt");
-    if (jwtToken && !token) {
-      dispatch(reauthenticate(jwtToken));
-    }
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    // Redirige l'utilisateur vers la page de profil s'il est connecté
-    if (user) {
+    if (token) {
       navigate("/profile");
     }
-  }, [user, navigate]);
+  }, [token, navigate]);
 
   return (
     <div className="routes">
