@@ -3,14 +3,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { signOut } from "../redux/authSlice";
 import { getUserData } from "../redux/userSlice";
+import {
+  setEditedFirstName,
+  setEditedLastName,
+  setIsEditing,
+  updateUserData,
+} from "../redux/editUserSlice";
 import Logo from "../assets/img/argentBankLogo.png";
 
 const UserProfile = () => {
-  const { token } = useSelector((state) => state.auth);
-  const userDetails = useSelector((state) => state.user.userDetails);
-  const isLoading = useSelector((state) => state.user.isLoading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { token } = useSelector((state) => state.auth);
+  const { userDetails, isLoading } = useSelector((state) => state.user);
+  const { isEditing, editedFirstName, editedLastName } = useSelector(
+    (state) => state.editUser
+  );
 
   useEffect(() => {
     if (!token) {
@@ -25,14 +34,42 @@ const UserProfile = () => {
     }
   }, [token, dispatch, navigate]);
 
-  if (isLoading || !userDetails) {
-    return <div>Loading...</div>;
-  }
+  const handleEditClick = () => {
+    dispatch(setIsEditing(true));
+    dispatch(setEditedFirstName(userDetails.body.firstName));
+    dispatch(setEditedLastName(userDetails.body.lastName));
+  };
+
+  const handleSaveClick = async () => {
+    dispatch(
+      updateUserData({
+        token,
+        firstName: editedFirstName,
+        lastName: editedLastName,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        // Gestion de la réussite de la mise à jour
+        dispatch(getUserData(token));
+      })
+      .catch((error) => {
+        // Gestion des erreurs
+      });
+  };
+
+  const handleCancelClick = () => {
+    dispatch(setIsEditing(false));
+  };
 
   const handleSignOut = () => {
     dispatch(signOut());
     navigate("/signin");
   };
+
+  if (isLoading || !userDetails) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="bloc-body">
@@ -59,10 +96,38 @@ const UserProfile = () => {
           <h1 className="welcome-back">
             Welcome back
             <br />
-            {userDetails.body.firstName} {userDetails.body.lastName}
-            {"!"}
+            {!isEditing ? (
+              <>
+                {userDetails.body.firstName} {userDetails.body.lastName}
+                <br />
+                <button className="edit-button" onClick={handleEditClick}>
+                  Edit Name
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  className="edit-user"
+                  type="text"
+                  value={editedFirstName}
+                  onChange={(e) => dispatch(setEditedFirstName(e.target.value))}
+                />{" "}
+                <input
+                  className="edit-user"
+                  type="text"
+                  value={editedLastName}
+                  onChange={(e) => dispatch(setEditedLastName(e.target.value))}
+                />
+                <br />
+                <button className="edit-button" onClick={handleSaveClick}>
+                  Save
+                </button>{" "}
+                <button className="edit-button" onClick={handleCancelClick}>
+                  Cancel
+                </button>
+              </>
+            )}
           </h1>
-          <button className="edit-button">Edit Name</button>
         </div>
         {/* Début des sections de compte */}
         <h2 className="sr-only">Accounts</h2>
