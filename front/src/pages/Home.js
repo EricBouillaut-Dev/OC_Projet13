@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div>
+    <div className="bloc-body">
       <nav className="main-nav">
         <Link to="/" className="main-nav-logo">
           <img
@@ -19,8 +19,7 @@ const Home = () => {
         </Link>
         <div>
           <Link to="/signin" className="main-nav-item">
-            <i className="fa fa-user-circle"></i>
-            Sign In
+            <i className="fa fa-user-circle"></i> Sign In{" "}
           </Link>
         </div>
       </nav>

@@ -35,7 +35,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="main bg-dark">
+    <div className="bloc-body">
       <nav className="main-nav">
         <Link to="/" className="main-nav-logo">
           <img
@@ -47,19 +47,20 @@ const UserProfile = () => {
         </Link>
         <div>
           <Link className="main-nav-item" to="/profile">
-            <i className="fa fa-user-circle"></i>
-            {userDetails.body.email}
+            <i className="fa fa-user-circle"></i> {userDetails.body.firstName}{" "}
           </Link>
           <Link className="main-nav-item" onClick={handleSignOut}>
-            <i className="fa fa-sign-out"></i>
-            Sign Out
+            <i className="fa fa-sign-out"></i> Sign Out{" "}
           </Link>
         </div>
       </nav>{" "}
       <main className="main bg-dark">
         <div className="header">
-          <h1>
-            Welcome back, {userDetails ? userDetails.body.firstName : "User"}
+          <h1 className="welcome-back">
+            Welcome back
+            <br />
+            {userDetails.body.firstName} {userDetails.body.lastName}
+            {"!"}
           </h1>
           <button className="edit-button">Edit Name</button>
         </div>
@@ -105,7 +106,9 @@ const UserProfile = () => {
         {/* Affichage des informations du compte de l'utilisateur */}
         {/* ... */}
       </main>
-      <footer className="footer">{/* Pied de page */}</footer>
+      <footer className="footer">
+        <p className="footer-text">Copyright 2020 Argent Bank</p>
+      </footer>
     </div>
   );
 };

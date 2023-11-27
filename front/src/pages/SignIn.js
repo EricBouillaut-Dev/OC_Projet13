@@ -56,7 +56,7 @@ const SignIn = () => {
   };
 
   return (
-    <div>
+    <div className="bloc-body">
       <nav className="main-nav">
         <Link to="/" className="main-nav-logo">
           <img
@@ -68,15 +68,14 @@ const SignIn = () => {
         </Link>
         <div>
           <Link to="/signin" className="main-nav-item">
-            <i className="fa fa-user-circle"></i>
-            Sign In
+            <i className="fa fa-user-circle"></i> Sign In{" "}
           </Link>
         </div>
       </nav>
       <div className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
-          <h1>Sign In</h1>
+          <h1 className="sign-in">Sign In</h1>
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
               <label htmlFor="email">Email</label>
@@ -117,6 +116,9 @@ const SignIn = () => {
           </form>
         </section>
       </div>
+      <footer className="footer">
+        <p className="footer-text">Copyright 2020 Argent Bank</p>
+      </footer>
     </div>
   );
 };

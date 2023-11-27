@@ -6,7 +6,7 @@ html {
     color: #2c3e50;
   }
   
-  body {
+  .bloc-body {
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -153,6 +153,10 @@ html {
     margin-bottom: 0.5rem;
   }
   
+  .sign-in {
+    margin: 1.2rem;
+  }
+
   .sign-in-button {
     display: block;
     width: 100%;
@@ -172,10 +176,6 @@ html {
     margin: 0 auto;
     margin-top: 3rem;
     padding: 2rem;
-  }
-  
-  .sign-in-icon {
-    font-size: 5rem;
   }
   
   .input-remember {
@@ -279,6 +279,10 @@ html {
   .error-message{
     font-size: 12px;
     color: red;
+  }
+
+  .welcome-back{
+    margin: 1.2rem;
   }
 
   @media (min-width: 720px) {
