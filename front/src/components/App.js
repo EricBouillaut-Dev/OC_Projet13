@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { reauthenticate } from "../redux/authSlice"; // Assurez-vous que le chemin est correct
+import { useSelector } from "react-redux";
 import "../css/app.css";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";

@@ -1,27 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { signIn } from "../redux/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  signIn,
+  setEmail,
+  setPassword,
+  toggleRememberMe,
+  resetAuthError,
+  setEmailError,
+  setPasswordError,
+} from "../redux/authSlice";
 import Logo from "../assets/img/argentBankLogo.png";
 
 const SignIn = () => {
-  const [email, setEmail] = useState(localStorage.getItem("userEmail") || ""); // Initialiser avec la valeur de localStorage
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(
-    localStorage.getItem("userEmail") ? true : false
+  const { email, password, rememberMe, authError } = useSelector(
+    (state) => state.auth
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Supprimer le login de localStorage si "Remember me" n'est pas coché
-    if (!rememberMe) {
+    // Gérer le localStorage pour le "Remember Me"
+    if (rememberMe) {
+      localStorage.setItem("userEmail", email);
+    } else {
       localStorage.removeItem("userEmail");
     }
-  }, [rememberMe]);
+  }, [email, rememberMe]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(resetAuthError());
     dispatch(signIn({ email, password }))
       .unwrap()
       .then(() => {
@@ -34,7 +43,15 @@ const SignIn = () => {
         navigate("/profile");
       })
       .catch((error) => {
-        console.error("Erreur de connexion:", error);
+        if (error === "Error: User not found!") {
+          dispatch(setEmailError("User not found !"));
+        } else if (error === "Error: Password is invalid") {
+          dispatch(setPasswordError("Password is invalid !"));
+        } else {
+          // Gérer les autres erreurs non spécifiques
+          dispatch(setEmailError("Unknown error"));
+          dispatch(setPasswordError("Unknown error"));
+        }
       });
   };
 
@@ -67,8 +84,11 @@ const SignIn = () => {
                 type="text"
                 id="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => dispatch(setEmail(e.target.value))}
               />
+              {authError.email && (
+                <div className="error-message">{authError.email}</div>
+              )}
             </div>
             <div className="input-wrapper">
               <label htmlFor="password">Password</label>
@@ -76,15 +96,18 @@ const SignIn = () => {
                 type="password"
                 id="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => dispatch(setPassword(e.target.value))}
               />
+              {authError.password && (
+                <div className="error-message">{authError.password}</div>
+              )}
             </div>
             <div className="input-remember">
               <input
                 type="checkbox"
                 id="remember-me"
                 checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
+                onChange={() => dispatch(toggleRememberMe())}
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>

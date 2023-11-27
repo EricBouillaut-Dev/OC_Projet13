@@ -41,10 +41,6 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(getUserData.fulfilled, (state, action) => {
-        console.log(
-          "getUserData réussi, mise à jour de l'état:",
-          action.payload
-        );
         state.isLoading = false;
         state.userDetails = action.payload;
         state.error = null;

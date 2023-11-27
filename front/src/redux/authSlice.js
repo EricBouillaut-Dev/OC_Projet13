@@ -11,7 +11,6 @@ export const signIn = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.error("Erreur dans signIn:", error);
       if (!error.response) {
         // Handle network errors
         throw error;
@@ -60,15 +59,38 @@ const initialState = {
   token: isValidToken ? savedToken : null,
   isLoading: false,
   error: null,
+  email: localStorage.getItem("userEmail") || "",
+  password: "",
+  rememberMe: !!localStorage.getItem("userEmail"),
+  authError: { email: "", password: "" },
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setEmailError: (state, action) => {
+      state.authError.email = action.payload;
+    },
+    setPasswordError: (state, action) => {
+      state.authError.password = action.payload;
+    },
+    resetAuthError: (state) => {
+      state.authError = { email: "", password: "" };
+    },
+    setEmail: (state, action) => {
+      state.email = action.payload;
+    },
+    setPassword: (state, action) => {
+      state.password = action.payload;
+    },
+    toggleRememberMe: (state) => {
+      state.rememberMe = !state.rememberMe;
+    },
     signOut: (state) => {
       state.user = null;
       state.token = null;
+      state.password = "";
       // Retirer le token du localStorage
       localStorage.removeItem("jwt");
     },
@@ -86,14 +108,18 @@ const authSlice = createSlice({
         state.error = null;
         // Stocker le token dans le localStorage
         localStorage.setItem("jwt", action.payload.body.token);
-      })
-      .addCase(signIn.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
       });
   },
 });
 
-export const { signOut } = authSlice.actions;
+export const {
+  setEmail,
+  setPassword,
+  toggleRememberMe,
+  setEmailError,
+  setPasswordError,
+  resetAuthError,
+  signOut,
+} = authSlice.actions;
 
 export default authSlice.reducer;
