@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getUserData } from "./userSlice";
 import axios from "axios";
 
 // Action asynchrone pour mettre à jour les informations de l'utilisateur
@@ -27,6 +28,7 @@ export const updateUserData = createAsyncThunk(
 const initialState = {
   editedFirstName: "",
   editedLastName: "",
+  errorMessage: "",
   isEditing: false,
 };
 
@@ -49,14 +51,20 @@ const editUserSlice = createSlice({
       .addCase(updateUserData.fulfilled, (state, action) => {
         state.editedFirstName = action.payload.firstName;
         state.editedLastName = action.payload.lastName;
+        state.errorMessage = "";
         state.isEditing = false;
       })
       .addCase(updateUserData.rejected, (state, action) => {
-        state.errorMessage = action.error.message || "Échec de la mise à jour";
+        state.errorMessage = action.payload || "Échec de la mise à jour";
         state.isEditing = false;
       })
       .addCase(updateUserData.pending, (state) => {
+        state.errorMessage = "";
         state.isEditing = true;
+      })
+      .addCase(getUserData.fulfilled, (state) => {
+        // Réinitialiser le message d'erreur lorsque getUserData est réussie
+        state.errorMessage = "";
       });
   },
 });
