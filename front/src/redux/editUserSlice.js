@@ -4,19 +4,14 @@ import axios from "axios";
 // Action asynchrone pour mettre à jour les informations de l'utilisateur
 export const updateUserData = createAsyncThunk(
   "editUser/updateUserData",
-  async (
-    { token, firstName, lastName },
-    { rejectWithValue, dispatch, getState }
-  ) => {
+  async ({ token, firstName, lastName }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
         "http://localhost:3001/api/v1/user/profile",
         { firstName, lastName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      // Mise à jour des informations de l'utilisateur dans le userSlice après la mise à jour réussie
-      const userSlice = getState().user;
-      dispatch(userSlice.actions.updateUserDetails(response.data));
+      console.log("PUT OK:", response.data);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -57,10 +52,11 @@ const editUserSlice = createSlice({
         state.isEditing = false;
       })
       .addCase(updateUserData.rejected, (state, action) => {
-        // Gérer l'état rejected
+        state.errorMessage = action.error.message || "Échec de la mise à jour";
+        state.isEditing = false;
       })
       .addCase(updateUserData.pending, (state) => {
-        // Gérer l'état pending
+        state.isEditing = true;
       });
   },
 });

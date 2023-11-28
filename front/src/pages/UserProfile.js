@@ -51,10 +51,12 @@ const UserProfile = () => {
       .unwrap()
       .then(() => {
         // Gestion de la réussite de la mise à jour
+        console.log("Update OK");
         dispatch(getUserData(token));
       })
       .catch((error) => {
         // Gestion des erreurs
+        console.log("Update KO:", error);
       });
   };
 

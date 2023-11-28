@@ -32,7 +32,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // Vous pouvez ajouter des reducers synchrones ici si nécessaire
+    // reducers synchrones
   },
   extraReducers: (builder) => {
     builder
