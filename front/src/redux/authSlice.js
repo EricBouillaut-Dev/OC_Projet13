@@ -55,7 +55,7 @@ const savedToken = localStorage.getItem("jwt");
 const isValidToken = savedToken ? isTokenValid(savedToken) : false;
 
 const initialState = {
-  user: null,
+  // user: null,
   token: isValidToken ? savedToken : null,
   isLoading: false,
   error: null,
@@ -88,8 +88,9 @@ const authSlice = createSlice({
       state.rememberMe = !state.rememberMe;
     },
     signOut: (state) => {
-      state.user = null;
+      // state.user = null;
       state.token = null;
+      state.email = "";
       state.password = "";
       // Retirer le token du localStorage
       localStorage.removeItem("jwt");
@@ -103,7 +104,7 @@ const authSlice = createSlice({
       })
       .addCase(signIn.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.body.email;
+        // state.user = action.payload.body.email;
         state.token = action.payload.body.token;
         state.error = null;
         // Stocker le token dans le localStorage

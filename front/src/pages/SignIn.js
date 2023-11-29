@@ -20,13 +20,11 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Gérer le localStorage pour le "Remember Me"
-    if (rememberMe) {
-      localStorage.setItem("userEmail", email);
-    } else {
-      localStorage.removeItem("userEmail");
+    const storedEmail = localStorage.getItem("userEmail");
+    if (storedEmail) {
+      dispatch(setEmail(storedEmail));
     }
-  }, [email, rememberMe]);
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,6 +82,7 @@ const SignIn = () => {
                 id="email"
                 value={email}
                 onChange={(e) => dispatch(setEmail(e.target.value))}
+                autoComplete="email"
               />
               {authError.email && (
                 <div className="error-message">{authError.email}</div>
@@ -96,6 +95,7 @@ const SignIn = () => {
                 id="password"
                 value={password}
                 onChange={(e) => dispatch(setPassword(e.target.value))}
+                autoComplete="current-password"
               />
               {authError.password && (
                 <div className="error-message">{authError.password}</div>
