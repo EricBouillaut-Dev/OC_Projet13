@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserData } from "./userSlice";
+import { signIn } from "./authSlice";
 import axios from "axios";
 
 // Action asynchrone pour mettre à jour les informations de l'utilisateur
@@ -12,7 +12,6 @@ export const updateUserData = createAsyncThunk(
         { firstName, lastName },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("PUT OK:", response.data);
       return response.data;
     } catch (error) {
       if (!error.response) {
@@ -28,7 +27,6 @@ export const updateUserData = createAsyncThunk(
 const initialState = {
   editedFirstName: "",
   editedLastName: "",
-  errorMessage: "",
   isEditing: false,
 };
 
@@ -62,9 +60,8 @@ const editUserSlice = createSlice({
         state.errorMessage = "";
         state.isEditing = true;
       })
-      .addCase(getUserData.fulfilled, (state) => {
-        // Réinitialiser le message d'erreur lorsque getUserData est réussie
-        state.errorMessage = "";
+      .addCase(signIn.fulfilled, (state) => {
+        state.isEditing = false; // Mettre isEditing à false lorsque l'authentification réussit
       });
   },
 });

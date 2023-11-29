@@ -20,7 +20,6 @@ const UserProfile = () => {
   const { isEditing, editedFirstName, editedLastName } = useSelector(
     (state) => state.editUser
   );
-  const errorMessage = useSelector((state) => state.editUser.errorMessage);
 
   useEffect(() => {
     if (!token) {
@@ -53,8 +52,9 @@ const UserProfile = () => {
       .then(() => {
         dispatch(getUserData(token));
       })
-      .catch((error) => {
-        console.log("Update KO:", error);
+      .catch(() => {
+        dispatch(signOut());
+        navigate("/signin");
       });
   };
 
@@ -103,9 +103,6 @@ const UserProfile = () => {
                 <button className="edit-button" onClick={handleEditClick}>
                   Edit Name
                 </button>
-                {errorMessage && (
-                  <div className="error-message">Error: {errorMessage}</div>
-                )}
               </>
             ) : (
               <>
@@ -170,9 +167,6 @@ const UserProfile = () => {
             <button className="transaction-button">View transactions</button>
           </div>
         </section>
-        {/* Fin des sections de compte */}
-        {/* Affichage des informations du compte de l'utilisateur */}
-        {/* ... */}
       </main>
       <footer className="footer">
         <p className="footer-text">Copyright 2020 Argent Bank</p>
