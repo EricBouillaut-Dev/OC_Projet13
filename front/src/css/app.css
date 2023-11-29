@@ -301,19 +301,20 @@ html {
 }
 
 .error h2 {
-    margin: 75px;
-    font-size: 288px;
+    margin: 15vh;
+    font-size: 50px;
     font-weight: 700;
 }
 
 .error p {
-    font-size: 36px;
+    font-size: 32px;
+    color: #12002b;
 }
 
 .error a {
     font-size: 18px;
-    margin: 130px;
-    color: red;
+    margin: 15vh;
+    color: #00bc77;
     text-decoration: none;
     border-bottom: 1px solid;
 }
